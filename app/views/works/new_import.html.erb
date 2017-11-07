@@ -39,7 +39,7 @@
           <%= ts("URLs for existing work(s) or for the chapters of a single work; <strong>one URL per line.</strong>").html_safe %>
         </p>
       </dd>
-      <dt><%= label_tag "encoding", ts("Set custom encoding") %> <%= link_to_help "encoding-help" %></dt> 
+      <dt><%= label_tag "encoding", ts("Set custom encoding") %> <%= link_to_help "encoding-help" %></dt>
       <dd><%= select_tag "encoding", options_for_select([''] + Encoding.name_list.sort) %></dd>
       <dt><%= ts("Import as") %></dt>
       <dd>
@@ -121,6 +121,30 @@
   </fieldset>
 
   <%= render :partial => 'work_form_tags', locals: { include_blank: true, import: true } %>
+
+  <fieldset id="associations" role="article">
+    <legend><%= ts("Associations") %></legend>
+    <h3 class="landmark heading"><%= ts("Associations") %></h3>
+    <dl>
+      <!--backdate-->
+      <dt class="backdate">
+        <%= f.check_box :backdate, { id: "backdate-options-show", class: "toggle_formfield" } %>
+      </dt>
+      <dd class="backdate">
+        <%= label_tag "backdate-options-show", ts("Set a different publication date") %>
+        <%= link_to_help "backdating-help" %>
+
+        <fieldset id="backdate-options" class="optional">
+          <dl>
+            <dt><%= label_tag "published_at", ts("Set publication date") %></dt>
+            <dd id="managePublicationDate" class="datetime" title="<%= ts("set date") %>">
+              <!--BACK END, this select box does not seem to be acquiring the label published_at -->
+              <%= c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :value => @chapter.published_at, :order => [:day, :month, :year]) %>
+            </dd>
+          </dl>
+        </fieldset>
+      </dl>
+  </fieldset>
 
   <fieldset>
     <legend><%= label_tag :notes, ts("Notes") %></legend>
