@@ -4,7 +4,7 @@
 
    - AO3 was created because there was no place on the internet where fanfiction was truly free from persecution based on political or religious beliefs.
 
-   - You can read more about AO3 and its purpose in [What is the Archive of Our Own](https://archiveofourown.org/faq/about-the-archive?language_id=en#whatisao3)
+   - You can read more about AO3 and its purpose in [What is the Archive of Our Own?](https://archiveofourown.org/faq/about-the-archive?language_id=en#whatisao3)
 
    - You can read more about the OTW and our vision in [What We Believe](http://www.transformativeworks.org/what_we_believe/)
 
@@ -32,7 +32,7 @@
 
 #### How does AO3 raise money?
    
-   - The OTW accepts donations year round, but we also host regular fundraisers to raise money for AO3 and for our [other projects](http://www.transformativeworks.org/our-projects/) such as Fanlore and Open doors to name a few.
+   - The OTW accepts donations year round, but we also host regular fundraisers to raise money for AO3 and for our [other projects](http://www.transformativeworks.org/our-projects/) such as Fanlore and Open Doors to name a few.
 
    - Another sentence here written by devmem or someone informed about the average size of a donation and any other notable details about the fundraising process.
 
