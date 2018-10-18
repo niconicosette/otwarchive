@@ -50,7 +50,7 @@
 
 #### Instead of donations, why not host ads?
 
-   - Hosting advertisements means catering to advertisers' wishes. This means that if, for example, advertisers decided they want to do away with all LGBTQA+ content on AO3, suddenly all exiting and future works that included LGBTQA+ content would be subject to deletion.
+   - Hosting advertisements means catering to advertisers' wishes. This means that if, for example, advertisers decided they want to do away with all LGBTQA+ content on AO3, suddenly all existing and future works that included LGBTQA+ content would be subject to deletion.
 
    - Hosting advertisements can also mean selling our users' data and browsing preferences to advertisers so they can better target your interests and show you ads you're more likely to click on.
 
