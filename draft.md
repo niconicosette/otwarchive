@@ -14,7 +14,7 @@
 
    - AO3 is an open source project built in Ruby on Rails. Anyone can view our code on [Github](https://github.com/otwcode/otwarchive) and submit pull requests for [open issues](https://otwarchive.atlassian.net/projects/AO3/issues).
 
-   - AO3 is hosted on (James pwease write a sentence about the servers here...)
+   - AO3 is hosted on (James please write a sentence about the servers here...)
 
 
 
