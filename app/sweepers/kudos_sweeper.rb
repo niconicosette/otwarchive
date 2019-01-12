@@ -15,3 +15,5 @@ class KudosSweeper < ActionController::Caching::Sweeper
     expire_fragment "#{kudo.commentable.cache_key}/kudos/full"
   end
 end
+
+
