@@ -1,16 +1,15 @@
 class Indexer
-
   BATCH_SIZE = 1000
   INDEXERS_FOR_CLASS = {
-    "Work" => %w(WorkIndexer WorkCreatorIndexer BookmarkedWorkIndexer),
-    "Bookmark" => %w(BookmarkIndexer),
-    "Tag" => %w(TagIndexer),
-    "Pseud" => %w(PseudIndexer),
-    "Series" => %w(BookmarkedSeriesIndexer),
-    "ExternalWork" => %w(BookmarkedExternalWorkIndexer)
+    Work: %w[WorkIndexer WorkCreatorIndexer BookmarkedWorkIndexer],
+    Bookmark: %w[BookmarkIndexer],
+    Tag: %w[TagIndexer],
+    Pseud: %w[PseudIndexer],
+    Series: %w[BookmarkedSeriesIndexer],
+    ExternalWork: %w[BookmarkedExternalWorkIndexer]
   }.freeze
 
-  delegate :klass, :index_name, :document_type, to: :class
+  delegate :klass, :klass_with_includes, :index_name, :document_type, to: :class
 
   ##################
   # CLASS METHODS
@@ -18,6 +17,10 @@ class Indexer
 
   def self.klass
     raise "Must be defined in subclass"
+  end
+
+  def self.klass_with_includes
+    klass.constantize
   end
 
   def self.all
@@ -86,17 +89,14 @@ class Indexer
   def self.create_mapping
     $elasticsearch.indices.put_mapping(
       index: index_name,
-      type: document_type,
       body: mapping
     )
   end
 
   def self.mapping
     {
-      document_type: {
-        properties: {
-          # add properties in subclasses
-        }
+      properties: {
+        # add properties in subclasses
       }
     }
   end
@@ -110,8 +110,8 @@ class Indexer
       }
     }
   end
-  
-  def self.index_all(options={})
+
+  def self.index_all(options = {})
     unless options[:skip_delete]
       delete_index
       create_index
@@ -131,7 +131,6 @@ class Indexer
 
   # Add conditions here
   def self.indexables
-    Rails.logger.info "Blueshirt: Logging use of constantize class self.indexables #{klass}"
     klass.constantize
   end
 
@@ -147,7 +146,7 @@ class Indexer
   # Returns an array of indexers
   def self.for_object(object)
     name = object.is_a?(Tag) ? 'Tag' : object.class.to_s
-    (INDEXERS_FOR_CLASS[name] || []).map(&:constantize)
+    (INDEXERS_FOR_CLASS[name.to_sym] || []).map(&:constantize)
   end
 
   # Should be called after a batch update, with the IDs that were successfully
@@ -169,8 +168,7 @@ class Indexer
   end
 
   def objects
-    Rails.logger.info "Blueshirt: Logging use of constantize class objects #{klass}"
-    @objects ||= klass.constantize.where(id: ids).inject({}) do |h, obj|
+    @objects ||= klass_with_includes.where(id: ids).inject({}) do |h, obj|
       h.merge(obj.id => obj)
     end
   end
@@ -200,7 +198,6 @@ class Indexer
   def index_document(object)
     info = {
       index: index_name,
-      type: document_type,
       id: document_id(object.id),
       body: document(object)
     }
@@ -212,9 +209,8 @@ class Indexer
 
   def routing_info(id)
     {
-      '_index' => index_name,
-      '_type' => document_type,
-      '_id' => id
+      "_index" => index_name,
+      "_id" => id
     }
   end
 

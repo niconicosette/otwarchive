@@ -1,10 +1,10 @@
 class OwnedTagSetsController < ApplicationController
   cache_sweeper :tag_set_sweeper
 
-  before_action :load_tag_set, except: [ :index, :new, :create, :show_options ]
-  before_action :users_only, only: [ :new, :create, :nominate ]
-  before_action :moderators_only, except: [ :index, :new, :create, :show, :show_options ]
-  before_action :owners_only, only: [ :destroy ]
+  before_action :load_tag_set, except: [:index, :new, :create, :show_options]
+  before_action :users_only, only: [:new, :create]
+  before_action :moderators_only, except: [:index, :new, :create, :show, :show_options]
+  before_action :owners_only, only: [:destroy]
 
   def load_tag_set
     @tag_set = OwnedTagSet.find_by(id: params[:id])
@@ -158,7 +158,7 @@ class OwnedTagSetsController < ApplicationController
   end
 
   def update
-    if @tag_set.update_attributes(owned_tag_set_params) && @tag_set.tag_set.save!
+    if @tag_set.update(owned_tag_set_params) && @tag_set.tag_set.save!
       flash[:notice] = ts("Tag Set was successfully updated.")
       redirect_to tag_set_path(@tag_set)
     else

@@ -1,7 +1,7 @@
 #header ul.primary,
 #footer,
 .autocomplete .dropdown ul li:hover,
-li.selected,
+.autocomplete .dropdown li.selected,
 a.tag:hover {
   background: #4295BC;
 }
@@ -16,6 +16,7 @@ a.tag:hover {
 #header p,
 #dashboard a:hover,
 .actions a:hover,
+.actions button:hover,
 .actions input:hover,
 .delete a,
 span.delete,
@@ -30,7 +31,7 @@ a.work,
 .blurb h4 img,
 .system .latest h3,
 .system div.news h3,
-.system .tweets h3,
+.system .social h3,
 .required,
 .error,
 a.cloud7,
@@ -51,7 +52,6 @@ input.LV_invalid_field:active,
 textarea.LV_invalid_field:hover,
 textarea.LV_invalid_field:active,
 #header .primary a,
-#header .primary .current,
 #header .primary input,
 #header .search input {
   border-color: #347391 !important;

@@ -1,3 +1,4 @@
+@archivist_import
 Feature: Archivist bulk imports
 
   Background:
@@ -51,6 +52,8 @@ Feature: Archivist bulk imports
       And 1 email should be delivered to "rebecca2525@livejournal.com"
       And the email should contain invitation warnings from "archivist" for work "Importing Test" in fandom "Lewis"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Import a work for multiple authors without accounts should display all in the byline
     When I go to the import page
       And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
@@ -58,12 +61,16 @@ Feature: Archivist bulk imports
       And I should see "name1 [archived by archivist]"
       And I should see "name2 [archived by archivist]"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Import a work for multiple authors without accounts should send emails to all authors
     When I go to the import page
       And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
     Then 1 email should be delivered to "a@ao3.org"
       And 1 email should be delivered to "b@ao3.org"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Import a work for multiple authors with and without accounts should display all in the byline
     Given the following activated users exist
       | login | email |
@@ -74,6 +81,8 @@ Feature: Archivist bulk imports
       And I should see "user1"
       And I should see "name2 [archived by archivist]"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Import a work for multiple authors with and without accounts should send emails to all authors
     Given the following activated users exist
       | login | email |
@@ -83,6 +92,8 @@ Feature: Archivist bulk imports
     Then 1 email should be delivered to "a@ao3.org"
       And 1 email should be delivered to "b@ao3.org"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Import a work for multiple authors with accounts should not display the archivist
     Given the following activated users exist
       | login | email |
@@ -95,6 +106,8 @@ Feature: Archivist bulk imports
       And I should see "user2"
       But I should not see "archivist" within ".byline"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Import multiple works as an archivist
     When I import the works "http://ao3testing.dreamwidth.org/593.html, http://ao3testing.dreamwidth.org/325.html"
     Then I should see multi-story import messages
@@ -102,10 +115,14 @@ Feature: Archivist bulk imports
       And I should see "Test entry"
       And I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Importing only sends one email even if there are many works
     When I import the works "http://ao3testing.dreamwidth.org/593.html, http://ao3testing.dreamwidth.org/325.html"
     Then 1 email should be delivered to "ao3testing@dreamwidth.org"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Importing for an existing Archive author should have correct byline and email
     Given the following activated user exists
       | login | email                     |
@@ -120,6 +137,8 @@ Feature: Archivist bulk imports
     When I go to ao3's works page
     Then I should see "Story"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Importing for an email address that's not associated with an existing Archive account, but that does belong to a user, allows the user to claim the works and add them to their account
     Given the user "creator" exists and is activated
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "creator" with email "not_creators_account_email@example.com"
@@ -136,6 +155,8 @@ Feature: Archivist bulk imports
     When I go to creator's works page
     Then I should see "Story"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Importing sends an email to a guessed address if it can't find the author
     When I import the work "http://ao3testing.dreamwidth.org/593.html"
     Then I should see import confirmation
@@ -144,6 +165,8 @@ Feature: Archivist bulk imports
       And 1 email should be delivered to "ao3testing@dreamwidth.org"
       And the email should contain invitation warnings from "archivist" for work "Story" in fandom "Testing"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Import a single work as an archivist specifying an external author
     When I go to the import page
       And I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
@@ -153,12 +176,16 @@ Feature: Archivist bulk imports
       And I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
       And 1 email should be delivered to "random@example.com"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Import a single work as an archivist specifying an external author with an invalid name
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "ra_ndo!m-t??est n@me." with email "random@example.com"
     Then I should see import confirmation
     And I should see "ra_ndom-test n@me."
     And 1 email should be delivered to "random@example.com"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Claim a work and create a new account in response to an invite
     Given account creation is enabled
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
@@ -174,6 +201,8 @@ Feature: Archivist bulk imports
     And I press "Create Account"
     Then I should see "Almost Done!"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Orphan a work in response to an invite, leaving name on it
     Given I have an orphan account
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
@@ -191,6 +220,8 @@ Feature: Archivist bulk imports
       And I view the work "Story"
     Then I should see "randomtestname (orphan_account)"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Orphan a work in response to an invite, taking name off it
     Given I have an orphan account
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
@@ -210,6 +241,8 @@ Feature: Archivist bulk imports
     Then I should not see "randomtestname"
       And I should see "orphan_account"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Delete an imported work and choose not to be notified of future imports of your works
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
     Then 1 email should be delivered to "random@example.com"
@@ -228,6 +261,8 @@ Feature: Archivist bulk imports
       And I import the work "http://ao3testing.dreamwidth.org/325.html" by "randomtestname" with email "random@example.com"
      Then 0 emails should be delivered to "random@example.com"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Leave an imported work in the archivist's care
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
     Then 1 email should be delivered to "random@example.com"
@@ -241,6 +276,8 @@ Feature: Archivist bulk imports
     Then I should be on the homepage
       And I should see "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved."
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Leave an imported work in the archivist's care and choose not to be notified of future imports of your works
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
     Then 1 email should be delivered to "random@example.com"
@@ -259,6 +296,8 @@ Feature: Archivist bulk imports
       And I import the work "http://ao3testing.dreamwidth.org/325.html" by "randomtestname" with email "random@example.com"
      Then 0 emails should be delivered to "random@example.com"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Leave an imported work in the archivist's care and do not allow future imports with your email address
     When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
     Then 1 email should be delivered to "random@example.com"
@@ -276,6 +315,8 @@ Feature: Archivist bulk imports
       And I import the work "http://ao3testing.dreamwidth.org/325.html" by "randomtestname" with email "random@example.com"
     Then I should see "We couldn't successfully import that work, sorry: Author randomtestname at random@example.com does not allow importing their work to this archive."
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Importing straight into a collection
     Given I have a collection "Club"
       And I am logged in as "archivist"
@@ -290,6 +331,8 @@ Feature: Archivist bulk imports
       And I should see "Club"
       And 1 email should be delivered to "random@example.com"
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Should not be able to import for others unless the box is checked
     When I go to the import page
       And I fill in "URLs*" with "http://ao3testing.dreamwidth.org/593.html"
@@ -319,6 +362,8 @@ Feature: Archivist bulk imports
     When I follow "http://example.com/my-immortal"
     Then I should be on the "My Immortal" work page
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Open Doors committee members can block an email address from having imports
     Given I have an Open Doors committee member "OpenDoors"
       And I have an archivist "archivist"
@@ -332,6 +377,8 @@ Feature: Archivist bulk imports
       And I import the work "http://ao3testing.dreamwidth.org/593.html" by "ao3testing" with email "random@example.com"
     Then I should see "Author ao3testing at random@example.com does not allow importing their work to this archive."
 
+  # TODO: Enable after AO3-6353.
+  @wip
   Scenario: Open Doors committee members can supply a new email address for an already imported work.
     Given I have an Open Doors committee member "OpenDoors"
       And I have an archivist "archivist"

@@ -1,18 +1,36 @@
 class Bookmark < ApplicationRecord
-
-  include ActiveModel::ForbiddenAttributesProtection
   include Collectible
   include Searchable
   include Responder
   include Taggable
 
-  belongs_to :bookmarkable, polymorphic: true
-  belongs_to :pseud
+  belongs_to :bookmarkable, polymorphic: true, inverse_of: :bookmarks
+  belongs_to :pseud, optional: false
 
   validates_length_of :bookmarker_notes,
     maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
-  default_scope -> { order("bookmarks.id DESC") } # id's stand in for creation date
+  validate :not_already_bookmarked_by_user, on: :create
+  def not_already_bookmarked_by_user
+    return unless self.pseud && self.bookmarkable
+
+    return if self.pseud.user.bookmarks.where(bookmarkable: self.bookmarkable).empty?
+
+    errors.add(:base, ts("You have already bookmarked that."))
+  end
+
+  validate :check_new_external_work
+  def check_new_external_work
+    return unless bookmarkable.is_a?(ExternalWork) && bookmarkable.new_record?
+
+    errors.add(:base, "Fandom tag is required") if bookmarkable.fandom_string.blank?
+
+    return if bookmarkable.valid?
+
+    bookmarkable.errors.full_messages.each do |message|
+      errors.add(:base, message)
+    end
+  end
 
   # renaming scope :public -> :is_public because otherwise it overlaps with the "public" keyword
   scope :is_public, -> { where(private: false, hidden_by_admin: false) }
@@ -20,13 +38,7 @@ class Bookmark < ApplicationRecord
   scope :not_private, -> { where(private: false) }
   scope :since, lambda { |*args| where("bookmarks.created_at > ?", (args.first || 1.week.ago)) }
   scope :recs, -> { where(rec: true) }
-
-  scope :in_collection, lambda {|collection|
-    select("DISTINCT bookmarks.*").
-    joins(:collection_items).
-    where('collection_items.collection_id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
-            [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
-  }
+  scope :order_by_created_at, -> { order("created_at DESC") }
 
   scope :join_work, -> {
     joins("LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')").
@@ -87,7 +99,9 @@ class Bookmark < ApplicationRecord
 
   scope :visible_to_admin, -> { not_private }
 
-  scope :latest, -> { is_public.limit(ArchiveConfig.ITEMS_PER_PAGE).join_work }
+  scope :latest, -> { is_public.order_by_created_at.limit(ArchiveConfig.ITEMS_PER_PAGE).join_work }
+
+  scope :for_blurb, -> { includes(:bookmarkable, :pseud, :tags, :collections) }
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
